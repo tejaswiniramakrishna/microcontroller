@@ -1,0 +1,475 @@
+Simple data handling programs in ALP -- Addition of 8 bit / 16 bit numbers
+
+;addition two 16 bit data
+#include "msp430f449.h"                     		 	 ; #define controlled include file
+
+ ORG   0x3010
+mystr  	            DW    0x4444
+
+       		 ORG   0x3020
+mystr1 	 DW    0xAAAA
+                                      		 			 ; outside this module
+       		 ORG     0FFFEh
+       		 DC16    init                    			; set reset vector to 'init' label
+
+       		 RSEG    CSTACK                		 	 ; pre-declaration of segment
+ RSEG    CODE                   		           ; place program in 'CODE'                                        		                                                       segment
+
+init:  		 MOV     #SFE(CSTACK), SP       		 ; set up stack
+
+main:  	            NOP                             			; main program
+       		 MOV.W   #WDTPW+WDTHOLD,&WDTCTL ; Stop watchdog timer
+        
+        		CLR     R5                      
+MOV.W  0X3010(R5),R4            	; moving data from 0x3010                                             address to R4 register
+MOV.W  0X3020(R5),R6           	; moving data from 0x3020  address to R6 register
+        
+       		 ADD.W   R4,R6
+MOV.W   R6,0X3030(R5)          		;RESULT IS STORED IN 0X3030                                                                                      
+								ADDRESS
+             
+       		 JMP $                          			 ; jump to current location '$'
+                                       		     			 ; (endless loop)
+       		 END
+
+;block move from one mem location to the other , from 0x3010 to 0x3020
+;***********************************************************************
+
+#include "msp430f449.h"                    		 ; #define controlled include file
+
+        	 	ORG  0X3010
+mystr1  		DW   0X1122 
+        		DW   0X3344
+       	 		DW   0X5566
+        		DW   0X7788
+        		DW   0X99AA
+       
+       		 	ORG  0X3020
+mystr2 	 	DS    10     
+
+        		NAME    main                   		 ; module name
+
+        		PUBLIC  main                    		; make the main label vissible
+                                        				; outside this module
+        		ORG     0FFFEh
+       		 	DC16    init                   		 ; set reset vector to 'init' label
+
+        		RSEG    CSTACK                  		 ; pre-declaration of segment
+        		RSEG    CODE                   		 ; place program in 'CODE' segment
+
+
+init:  		MOV     #SFE(CSTACK), SP       	 ; set up stack
+
+main:  		NOP                             		; main program
+        		MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog time
+        
+        		CLR.W   R5                        
+
+        
+L1:     		MOV.W   0x3010(R5),0x3020(R5)     
+        		INC     R5                       		 ; increment two times for to get 
+                                                                                   even address 
+        		INC     R5
+        		CMP     #0010,R5                  
+        		JNE     L1
+        
+     
+        		JMP $                           		; jump to current location '$'
+                                        				; (endless loop)
+        		END
+;*************************************************
+
+;block exchange from one memory to another.
+;e.g 0x3010 to 0x3020
+;***********************************************************
+#include "msp430f449.h"                    		 ; #define controlled include file
+
+      			ORG 0X3010
+mystr1		DW 0X1111
+      			DW 0X2222
+       			DW 0X3333
+      			DW 0X4444
+       			DW 0X5555
+
+       			ORG 0X3020 
+mystr2	 	DW 0XAAAA
+       			DW 0XBBBB
+       			DW 0XCCCC
+       			DW 0XDDDD
+       			DW 0XEEEE
+       
+			NAME   	 main                   	 ; module name
+ 			PUBLIC 	 main                   	 ; make the main label vissible
+                         					 ; outside this module
+       			ORG     0FFFEh
+        		DC16    init                   		 ; set reset vector to 'init' label
+       			RSEG    CSTACK                 		 ; pre-declaration of segment
+       			RSEG    CODE                   		 ; place program in 'CODE' segment
+
+init:  		MOV     #SFE(CSTACK), SP       	 ; set up stack
+main:      	NOP                           		  ; main program
+       		 	MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer    
+        		CLR.W   R5
+        
+L1:    		MOV.W   0x3010(R5),R6
+        		MOV.W   0x3020(R5),R7
+       		 	MOV.W   R7,0x3010(R5)     
+        		MOV.W   R6,0x3020(R5)
+   	INC     R5   				 ;increment R5 two times for to get
+							the even address                                     
+       			 INC     R5
+        		CMP    #0010,R5
+        		JNE    L1
+      
+       		 	JMP $                          		 ; jump to current location '$'
+                                       				 ; (endless loop)
+       		 	END
+;*************************************************
+
+Session:4
+Division of 8 bit/ 16 bit numbers
+Multiplication of 8 bit / 16 bit numbers    (Self learning)  
+DIVISION OF TWO 16 BIT NUMERS, R4 IS DIVIDEND, R5 IS DEVIDER
+;ANSWER IS STORED IN THE ADDRESS : REMINDER 0x3030,
+;QUOTIENT 0x3032
+
+#include "msp430f449.h"                     		; #define controlled include file
+        		ORG    0x3010
+mystr   	DW     0x0004  
+
+        		ORG    0x3020
+mystr1  	DW     0x000F
+
+        		NAME    main                    		; module name
+        		PUBLIC  main                    		; make the main label vissible
+                                        				; outside this module
+        		ORG     0FFFEh
+        		DC16    init                    		; set reset vector to 'init' label
+
+        		RSEG    CSTACK                  	; pre-declaration of segment
+        		RSEG    CODE                    		; place program in 'CODE' segment
+
+init:   		MOV     #SFE(CSTACK), SP        	; set up stack
+
+main:   	NOP                             		; main program
+        		MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+       
+        		CLR     R5
+        		MOV.W   0x3010(R5),R4          
+        		MOV.W   0x3020(R5),R7
+        
+        		MOV #0000h,R6                             ; 16 bit or 8 bit
+    L2: 		SUB    R4,R7 
+        		ADD   #0001h,R6
+        		CMP   R4,R7               		;JUMP ON LESS THAN IF R5 
+        		JN    L1                  			;IS LESS THAN R4 THEN JUMP TO L1
+        		JMP L2
+        
+  L1:  		MOV   R7,0X3030(R5)           	; REMINDER
+       		INC   R5
+       		INC   R5
+       		MOV   R6,0X3030(R5)          	;QUOTIENT
+       
+        		
+    		JMP   '$'                       		; jump to current location '$'
+                                        				; (endless loop)
+       		 END
+           
+           Session :5
+Find the largest number in a given array
+Find square of given 8 bit/ 16 bit data
+Find the smallest number in a given array  (Self learning)  
+Find cube of given 8 bit/ 16 bit data         (Self learning)    
+
+;finding the largest element in the array
+;***************************************************************************
+#include "msp430f449.h"                    		 ; #define controlled include file
+        		ORG  0X3010
+mystr   	DW   0X3333
+        		DW   0X1111
+        		DW   0X5555
+        		DW   0X2222
+        		DW   0XFFFF
+        		DW   0X8888
+        		DW   0X6666
+        		DW   0X7777
+
+        		NAME    main                    		; module name
+        		PUBLIC  main                    		; make the main label vissible
+                                       				 ; outside this module
+        		ORG     0FFFEh
+        		DC16    init                    		; set reset vector to 'init' label
+        		RSEG    CSTACK                  		; pre-declaration of segment
+        		RSEG    CODE                    		; place program in 'CODE' segment
+
+init:   		MOV     #SFE(CSTACK), SP        	; set up stack
+main:  		 NOP                             		; main program
+        		MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+      		CLR R5
+        		CLR R9
+        		MOV.W   #0X0007,R10
+        		MOV.W   0X3010(R5),R6
+L3:     		INC     R5
+        		INC     R5
+        		CMP     0X3010(R5),R6
+        		JC      L1
+        		JNE     L2
+        		JMP     L1
+       
+L2:     		MOV.W   0X3010(R5),R6
+        		
+
+L1:     		DEC    R10
+        		
+        		JNZ     L3
+        		MOV.W  R6,0X3020(R10)
+        
+        		JMP $                           		; jump to current location '$'
+                       END          				; (endless loop)
+        		
+;*************************************************
+
+SQUARE
+;*************************************************
+
+#include "msp430.h"                     			; #define controlled include file
+
+        		ORG   0x3010
+mystr   	DW    0x1234
+
+        		NAME    main                    		; module name
+
+        		PUBLIC  main                    		; make the main label vissible
+                                        				; outside this module
+        		ORG     0FFFEh
+        		DC16    init                    		; set reset vector to 'init' label
+
+        		RSEG    CSTACK                  		; pre-declaration of segment
+        		RSEG    CODE                    		; place program in 'CODE' segment
+
+init:   		MOV     #SFE(CSTACK), SP        	; set up stack
+
+main:   	NOP                             		; main program
+        		MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        
+        		CLR     R5
+        		MOV.W  0X3010(R5),R4
+        		MOV.W  R4,R8
+        		mov.w  R4,R7
+        		MOV.W  #0000,R6
+        		SUB.W  #0001,R8
+L1:     		ADD.W  R7,R4
+        		JNC    L2
+        		INC    R6
+L2:     		DEC    R8
+        		JNZ    L1
+        		MOV.W  R6,0X3020(R5)      		;HIGHER BYTE
+        		INC    R5                 			;FORN TO GET THE EVEN ADDRESS
+        		INC    R5  
+        		MOV.W  R4,0X3020(R5)      		;LOWER BYTE
+        		JMP $                           		; jump to current location '$'
+                                        				; (endless loop)
+        		END
+;*************************************************
+
+Session :6
+Sort the elements of an array in ascending order
+Sort the elements of an array in descending order    (Self learning)  
+
+Sort the given block of data arranging in ascending order
+;******************************************************************************
+#include "msp430f449.h"                     		; #define controlled include file
+       			 ORG  0X3010
+mystr   		DW   0X7777
+        		DW   0X1111
+        		DW   0X5555
+        		DW   0X2222
+        		DW   0X4444
+        		DW   0X8888
+        		DW   0X6666
+        		DW   0X3333
+
+        		NAME    main                    		; module name
+        		PUBLIC  main                    		; make the main label vissible
+                                    				 ; outside this module
+        		ORG     0FFFEh
+        		DC16    init                    		; set reset vector to 'init' label
+        		RSEG    CSTACK                  		; pre-declaration of segment
+        		RSEG    CODE                    		; place program in 'CODE' segment
+init:   		MOV     #SFE(CSTACK), SP        	; set up stack
+main:   		NOP                             		; main program
+        		MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+L4:    		CLR R5
+       			CLR R9
+       			MOV.W #0X0007,R10
+       
+L3:    		MOV.W  0X3010(R5),R6
+       			INC    R5
+       			INC    R5
+       			CMP   0X3010(R5),R6              	; compare with second value
+       			JNC    L1                        		; if greater than jump to L1
+       			JNE    L2                        		; if less than jump to L2
+       			JMP    L1
+ L2:    		MOV.W  0X3010(R5),R7             	;exchange the value
+       			DEC    R5
+       			DEC    R5
+       			MOV.W  R7,0X3010(R5)
+       			INC    R5
+       			INC    R5
+       			MOV.W  R6,0X3010(R5)
+       			MOV.W  #0X0001,R9                	; set R9
+L1:    		DEC   R10
+       			CMP    #0X0000,R10
+       			JNE    L3
+       			JNZ    L4
+          		JMP $                           		; jump to current location '$'
+                                        				; (endless loop)
+        		END
+Worksheet 
+Session :7
+Convert a given BCD number to ASCII
+Convert a given Decimal number to HEX
+Convert a given hexadecimal number to decimal   (Self learning)
+Convert a given Decimal number to ASCII             (Self learning)     
+
+;BCD to ASCII:
+;*************************************************
+
+#include "msp430f449.h"                     		; #define controlled include file
+        		ORG 0X3010
+MYSTRNG 	DB   0X09
+
+         		ORG 0X3020
+MYSTRNG1 	DB   0X00
+
+        		NAME    main                    		; module name
+
+        		PUBLIC  main                    		; make the main label vissible
+                                        ; outside this module
+        		ORG     0FFFEh
+        		DC16    init                    		; set reset vector to 'init' label
+
+        		RSEG    CSTACK                  		; pre-declaration of segment
+        		RSEG    CODE                    		; place program in 'CODE' segment
+
+init:   		MOV     #SFE(CSTACK), SP        	; set up stack
+
+main:   		NOP                             		; main program
+        		MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        
+        		MOV    #MYSTRNG,R4
+        		MOV    @R4,R6
+        		CMP    #0X00,R6
+        		JGE    LOOP
+        		JMP    LAST
+        
+LOOP:   		CMP    #0X0A,R6
+        		JL     START
+        		JMP    LAST
+        
+START:  	CLR     R5
+        		ADD    #0X30,R6
+        		MOV    R6,0X3020(R5)
+        
+LAST:   		JMP $                           		; jump to current location '$'
+                                        				; (endless loop)
+        		END
+;*************************************************
+
+
+
+
+
+; decimal to hex conversion
+;the decimal value stored in the 0x3010 address
+; result is saved in the 0X3020 address
+;*************************************************
+
+#include "msp430f449.h"                     		; #define controlled include file
+
+        		NAME    main                    		; module name
+
+        		PUBLIC  main                    		; make the main label vissible
+                                        ; outside this module
+        		ORG     0FFFEh
+        		DC16    init                    		; set reset vector to 'init' label
+
+        		RSEG    CSTACK                  		; pre-declaration of segment
+        		RSEG    CODE                    		; place program in 'CODE' segment
+
+init:   		MOV     #SFE(CSTACK), SP        	; set up stack
+
+main:   		NOP                             		; main program
+        		MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+                         CLR    R8
+        		MOV    #0x99,0X3010 (R8)              	;take the decimal value
+        		MOV    #0x00,0X3020  (R8)              	;init 00 the memory for to 
+                                                                                    display the result
+        		MOV.W  #00,R5                   		; initialise the counter
+        		MOV    0X3010,R4
+        		MOV    R4,R6
+        		AND    #0XF0,R4
+        		AND    #0x0F,R6
+L1:     		RRA    R4                       		;rotate right 4 times  0x90--->0x09
+        		INC    R5
+        		CMP    #04,R5
+        		JNE    L1
+        
+        		CLR    R5
+        		MOV    R4,R7
+L2:     		ADD    R7,R4                    		;successive addition 10 times(10*R5)
+        		INC    R5
+        		CMP    #0x09,R5                 		; 10 time compare 
+        		JNE    L2
+        		CLR    R5
+        
+        		ADD    R6,R4                    		; add the result with R6
+        		MOV.W  R4,0X3020   (R8)              
+        
+        		JMP $                           		; jump to current location '$'
+                                        				; (endless loop)
+        		END
+;*************************************************
+
+Session :8
+		
+ C program to switch LED1 and LED2 ON and OFF at periodic rate
+
+	
+Led Blinking
+
+#include <msp430x44x.h>
+#include <in430.h>
+#include "init_device.h"
+
+void delay(void);
+void port_init(void);
+
+unsigned int k=0;
+
+void port_init() 
+{
+
+   P5OUT=0x00;                 // Initially Apply Low to all P5 port line
+   P5DIR=0x0C;                 // P5.2 and P5.3 as a O/P
+   P5SEL=0x00;                 // Select P5.0 to P5.7 as GPIO
+}
+
+void main(void)
+ {
+   WDTCTL = WDTPW+WDTHOLD;     // WDTPW = 0x5A00 Password and WDTHOLD = 0x0080 Stop watchdog timer
+   init_devices();
+   port_init();                // initialize required port lines
+   while(1) {
+   P5OUT |= (BIT2|BIT3);    // P5.2 and P5.3 are made high to turn ON LED L2 and  L3
+      delay();
+   P5OUT &= ~(BIT2|BIT3);   // P5.2 and P5.3 are made low to turn OFF LED L2 and L3
+      delay();
+   }
+}
+
+void delay(void)
+ {
+   for(k=0;k<65000;k++);
+   for(k=0;k<65000;k++);
+}
