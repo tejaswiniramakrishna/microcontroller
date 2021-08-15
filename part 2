@@ -1,0 +1,388 @@
+Session :9
+C program to Interface LCD module and display given characters/string. 
+ #include <msp430x44x.h>
+#include "init_device.h"
+#include "lcd.h"
+#include <in430.h>
+/* LCD rel variables */
+unsigned char str1[]="ALS, R&D Section";
+unsigned char str2[]="    Bangalore-58";
+unsigned char *ptr;
+unsigned char temp; 
+unsigned int j;
+
+void port_init()
+{
+    P6OUT=0x00;
+  P6SEL=0x00;
+  P6DIR=0xFC;                       //lcd0-->lcd3,RS,EN as o/p
+}
+//interrupt handlers 
+//main code entry point
+void main(void)
+{
+  WDTCTL = WDTPW + WDTHOLD;           // Stop watchdog timer
+  init_devices();
+  port_init();
+  for(j=0;j<5000;j++);                // Power ON delay(15ms)for lcd
+  for(j=0;j<5000;j++);
+  for(j=0;j<5000;j++);
+  for(j=0;j<5000;j++);
+  lcd_init();
+  while(1)
+  { /* display first string on LCD line one */
+      ptr = str1;
+      temp = 0x80;
+      lcd_comm()
+      while(*ptr != '\0') {
+        temp = *ptr;
+        lcd_data();
+        ptr++;
+   }  /* display second string on LCD line two */
+      ptr = str2; 
+      temp = 0xc0;
+      lcd_comm();
+      while(*ptr != '\0') {
+        temp = *ptr;
+        lcd_data();
+        ptr++;
+      }
+      for(j=0;j<5000;j++);                // Power ON delay(15ms)for lcd
+  }
+}
+
+
+C program to  rotate stepper motor in clockwise direction
+#include <msp430x44x.h>
+#include <in430.h>
+#include “initdevice.h”
+
+void port_init(void);
+void delay(void);
+
+unsigned int i;
+
+
+void port_init(void)
+{
+  P4SEL |= 0x00;
+  P4DIR |= 0x0F;
+  P4OUT |= 0x00;               
+}
+
+void main(void)
+{
+	 WDTCTL = WDTPW+WDTHOLD;         // Stop watchdog timer
+     init_devices();
+    port_init();
+  for ( i=0; i<0x3600; i++);         		// Delay for reference start-up
+  
+	while(1)
+	{
+	  P4OUT = 0x07;
+	  delay();
+	  
+	  P4OUT = 0x0B;
+	  delay();
+	  
+	  P4OUT = 0x0D;
+	  delay();
+	  
+	  P4OUT = 0x0E;	
+	  delay();
+	  
+	}
+}
+void delay(void)
+{
+	int i;
+	for(i=0;i<=10000;i++);
+}
+
+
+
+
+ C program to rotate stepper motor in anticlockwise  direction
+#include <msp430x44x.h>
+#include <in430.h>
+#include “initdevice.h”
+
+void port_init(void);
+void delay(void);
+
+unsigned int i;
+
+
+void port_init(void)
+{
+  P4SEL |= 0x00;
+  P4DIR |= 0x0F;
+  P4OUT |= 0x00;               
+}
+
+void main(void)
+{
+	 WDTCTL = WDTPW+WDTHOLD;         // Stop watchdog timer
+     init_devices();
+    port_init();
+  for ( i=0; i<0x3600; i++);         		// Delay for reference start-up
+  
+	while(1)
+	{
+	  P4OUT = 0x07;
+	  delay();
+	  
+	  P4OUT = 0x0E;
+	  delay();
+	  
+	  P4OUT = 0x0D;
+	  delay();
+	  
+	  P4OUT = 0x0B;	
+	  delay();
+	  
+	}
+}
+void delay(void)
+{
+	int i;
+	for(i=0;i<=10000;i++);
+}
+
+
+C program to interface DAC and generate waveforms
+
+Sine wave:
+
+#include <msp430x44x.h>
+#include <in430.h>
+#include “initdevice.h”
+
+void port_init(void);
+
+unsigned int i;
+ int count;
+ 
+ unsigned char sine_tab[49]=
+        { 0x80,0x90,0xA1,0xB1,0xC0,0xCD,0xDA,0xE5,0xEE,0xF6,0xFB,0xFE,
+          0xFF,0xFE,0xFB,0xF6,0xEE,0xE5,0xDA,0xCD,0xC0,0xB1,0xA1,0x90,
+          0x80,0x70,0x5F,0x4F,0x40,0x33,0x26,0x1B,0x12,0x0A,0x05,0x02,
+          0x00,0x02,0x05,0x0A,0x12,0x1B,0x26,0x33,0x40,0x4F,0x5F,0x70,0x80};
+
+void port_init(void)
+{
+ 
+  P2SEL |= 0x00;
+  P2DIR |= 0xFF;
+  P2OUT |= 0x00;
+                 
+}
+void main(void)
+{
+	 WDTCTL = WDTPW+WDTHOLD;         // Stop watchdog timer
+     init_devices();
+    port_init();
+  for ( i=0; i<0x3600; i++);         		// Delay for reference start-up
+  count = 0;
+	while(1)
+	{
+		for(count=0;count<49;count++)
+		{
+			P2OUT = sine_tab[count] ;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+Square wave:
+
+#include <msp430x44x.h>
+#include <in430.h>
+#include “initdevice.h”
+
+void port_init(void);
+void delay(void);
+
+unsigned int i;
+
+void port_init(void)
+{
+ 
+  P2SEL |= 0x00;
+  P2DIR |= 0xFF;
+  P2OUT |= 0x00;
+                 
+}
+
+
+void main(void)
+{
+	 WDTCTL = WDTPW+WDTHOLD;         // Stop watchdog timer
+     init_devices();
+     port_init();
+  for ( i=0; i<0x3600; i++);         		// Delay for reference start-up
+  
+	while(1)
+	{
+	P2OUT = 0x00;
+	delay();
+	
+	P2OUT = 0xFF;
+	delay();
+	  
+	}
+}
+void delay(void)
+{
+	int i=0;
+	for(i=0;i<=500;i++);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+Triangular wave:
+
+#include <msp430x44x.h>
+#include <in430.h>
+#include “initdevice.h”
+
+void port_init(void
+
+unsigned int i;
+ char count;
+
+void port_init(void)
+{
+ 
+  P2SEL |= 0x00;
+  P2DIR |= 0xFF;
+  P2OUT |= 0x00;
+                 
+}
+
+
+void main(void)
+{
+	 WDTCTL = WDTPW+WDTHOLD;         // Stop watchdog timer
+     init_devices();
+    port_init();
+  for ( i=0; i<0x3600; i++);         		// Delay for reference start-up
+  
+  count = 0;
+	while(1)
+	{
+		for(count=0;count<=0x3F;count++)
+		{
+			P2OUT = count ;
+		}
+		for(count=0x3F;count>0;count--)
+		{
+			P2OUT = count ;
+		}
+	  
+	}
+}
+
+
+
+
+
+
+
+Sawtooth/Ramp wave:
+
+#include <msp430x44x.h>
+#include <in430.h>
+#include “initdevice.h”
+
+void port_init(void
+
+unsigned int i;
+ char count;
+
+void port_init(void)
+{
+ 
+  P2SEL |= 0x00;
+  P2DIR |= 0xFF;
+  P2OUT |= 0x00;
+                 
+}
+
+
+void main(void)
+{
+    WDTCTL = WDTPW+WDTHOLD;         // Stop watchdog timer
+     init_devices();
+     port_init();
+  for ( i=0; i<0x3600; i++);         		// Delay for reference start-up
+  
+  count = 0;
+	while(1)
+	{
+		for(count=0;count<=0x3F;count++)
+		{
+			P2OUT = count ;
+		}
+		
+			P2OUT = 0X00;
+		
+	  
+	}
+}
+
+
+#include "msp430.h"                     ; #define controlled include file    (ADD WITH CARRY)
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+        ORG 0X3010                      ; outside this module
+NUM     DW 1234h
+        ORG 0X3020
+NUM1    DW 3456h        
+      
+      
+      ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+       CLR R5
+       MOV.W 0X3010(R5),R6
+       MOV.W 0X3020(R5),R7
+       ADD.W R6,R7
+       JNC L1
+       MOV #0001,0X3032(R5)
+L1:       MOV.W R7,0X3030(R5)
+       
+       
+       
+       
+       JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+        END
