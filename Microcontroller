@@ -126,7 +126,7 @@ L1:    		MOV.W   0x3010(R5),R6
        		 	END
 ;*************************************************
 
-Session:4
+
 Division of 8 bit/ 16 bit numbers
 Multiplication of 8 bit / 16 bit numbers    (Self learning)  
 DIVISION OF TWO 16 BIT NUMERS, R4 IS DIVIDEND, R5 IS DEVIDER
@@ -175,7 +175,7 @@ main:   	NOP                             		; main program
                                         				; (endless loop)
        		 END
            
-           Session :5
+       
 Find the largest number in a given array
 Find square of given 8 bit/ 16 bit data
 Find the smallest number in a given array  (Self learning)  
@@ -272,7 +272,7 @@ L2:     		DEC    R8
         		END
 ;*************************************************
 
-Session :6
+
 Sort the elements of an array in ascending order
 Sort the elements of an array in descending order    (Self learning)  
 
@@ -325,8 +325,7 @@ L1:    		DEC   R10
           		JMP $                           		; jump to current location '$'
                                         				; (endless loop)
         		END
-Worksheet 
-Session :7
+
 Convert a given BCD number to ASCII
 Convert a given Decimal number to HEX
 Convert a given hexadecimal number to decimal   (Self learning)
@@ -431,7 +430,7 @@ L2:     		ADD    R7,R4                    		;successive addition 10 times(10*R5)
         		END
 ;*************************************************
 
-Session :8
+
 		
  C program to switch LED1 and LED2 ON and OFF at periodic rate
 
