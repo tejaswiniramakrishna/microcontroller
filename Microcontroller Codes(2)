@@ -1,4 +1,4 @@
-Session :9
+
 C program to Interface LCD module and display given characters/string. 
  #include <msp430x44x.h>
 #include "init_device.h"
